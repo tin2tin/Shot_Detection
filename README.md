@@ -11,4 +11,4 @@ Ex. use the movie strip as the active selected strip and the audio strip as sele
 
 ## Installation
 Install the add-on as any Blender add-on.
-It is depenadant on this python lib: https://github.com/Breakthrough/PySceneDetect It should be installed automatically. If not, then this add-on on can be used to install it: https://github.com/amb/blender_pip
+It is depenadant on this python lib: https://github.com/Breakthrough/PySceneDetect by Brandon Castellano. It should be installed automatically. If not, then this add-on on can be used to install it: https://github.com/amb/blender_pip
