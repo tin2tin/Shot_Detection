@@ -2,7 +2,7 @@
 
 ![alt text](https://blender.chat/file-upload/AJKEtutaWrs527Wwv/Cam.gif)
 
-Detected video: 'Caminandes : Llamigos' by Pablo Vazquez
+Detected video: 'Caminandes : Llamigos' by Pablo Vazquez, Blender Studio
 
 ## Usage
 When installed, the operator, "Detect Shots & Split Strips", is exposed in the bottom of the Strip Menu.
