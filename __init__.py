@@ -37,6 +37,10 @@ from bpy.props import (
     StringProperty,
     FloatProperty,
 )
+import site
+app_path = site.USER_SITE
+if app_path not in sys.path:
+    sys.path.append(app_path)
 
 pybin = sys.executable  # bpy.app.binary_path_python # Use for 2.83
 try:
