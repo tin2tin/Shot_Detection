@@ -48,36 +48,26 @@ try:
 except ImportError:
     pass
 try:
-    from scenedetect import VideoManager
+    from scenedetect import open_video, detect
     from scenedetect import SceneManager
-    # For content-aware scene detection:
     from scenedetect.detectors import ContentDetector
 except ImportError:
     subprocess.check_call([pybin, "-m", "pip", "install", "scenedetect[opencv]"])
-    from scenedetect import VideoManager
+    from scenedetect import open_video, detect
     from scenedetect import SceneManager
-    # For content-aware scene detection:
     from scenedetect.detectors import ContentDetector
 
 
 def find_scenes(video_path, threshold, start, end):
     render = bpy.context.scene.render
     fps = round((render.fps / render.fps_base), 3)
-    print(fps)
-    video_manager = VideoManager([video_path],framerate=fps)
-
+    video = open_video(video_path,framerate=fps)
     scene_manager = SceneManager()
     scene_manager.add_detector(ContentDetector(threshold=threshold))
+    video.seek((start/fps))
+    scene_manager.detect_scenes(video, end_time=(end/fps))
 
-    base_timecode = video_manager.get_base_timecode()
-    print(base_timecode+(start/fps))
-    print(base_timecode+(end/fps))
-    video_manager.set_duration(start_time=base_timecode+(start/fps), end_time=base_timecode+(end/fps))
-    video_manager.set_downscale_factor()
-    video_manager.start()
-    scene_manager.detect_scenes(frame_source=video_manager)
-
-    return scene_manager.get_scene_list(base_timecode)
+    return scene_manager.get_scene_list()
 
 
 class SEQUENCER_OT_split_selected(bpy.types.Operator):
@@ -169,9 +159,9 @@ class SEQUENCER_OT_detect_shots(Operator):
         active = context.scene.sequence_editor.active_strip
         start_time = active.frame_offset_start
         end_time = active.frame_duration - active.frame_offset_end
-        scenes = find_scenes(path, 27, start_time, end_time)
+        scenes = find_scenes(path, 32, start_time, end_time)
         for i, scene in enumerate(scenes):
-            context.scene.frame_current = scene[1].get_frames()+active.frame_start
+            context.scene.frame_current = int(scene[1].get_frames()+active.frame_start)
             sequencer.split_selected()
 
         context.scene.frame_current = cf
