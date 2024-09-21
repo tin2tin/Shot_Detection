@@ -1,3 +1,4 @@
+[<img src="https://img.shields.io/badge/Discord%20-%20Invite">](https://discord.gg/HMYpnPzbTm) ![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/tintwotin)
 # Shot Detection in the Blender Video Sequence Editor
 
 [![IMAGE ALT TEXT HERE](https://github.com/tin2tin/shot_detection/blob/main/shot_detect_yt.png?raw=true)](https://www.youtube.com/watch?v=zWNQMII-IAE)
