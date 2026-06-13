@@ -20,7 +20,7 @@ bl_info = {
     "name": "Detect Shots and Split Strips",
     "author": "Tintwotin, Brandon Castellano(PySceneDetect-module)",
     "version": (1, 0),
-    "blender": (2, 90, 0),
+    "blender": (5, 2, 0),
     "location": "Sequencer > Strip Menu or Context Menu",
     "description": "Detect shots in active strip and split all selected strips accordingly.",
     "warning": "",
@@ -87,13 +87,13 @@ class SEQUENCER_OT_split_selected(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.sequences:
+        if context.strips:
             return True
         return False
 
     def execute(self, context):
-        selection = context.selected_sequences
-        sequences = bpy.context.scene.sequence_editor.sequences_all
+        selection = context.selected_strips
+        sequences = bpy.context.sequencer_scene.sequence_editor.strips_all
         cf = bpy.context.scene.frame_current
         at_cursor = []
         cut_selected = False
@@ -117,7 +117,7 @@ class SEQUENCER_OT_split_selected(bpy.types.Operator):
                     )
 
                     # add new strip to selection
-                    for i in bpy.context.scene.sequence_editor.sequences_all:
+                    for i in bpy.context.sequencer_scene.sequence_editor.strips_all:
                         if i.select:
                             selection.append(i)
                     bpy.ops.sequencer.select_all(action="DESELECT")
@@ -137,10 +137,10 @@ class SEQUENCER_OT_detect_shots(Operator):
     def poll(cls, context):
         if (
             context.scene
-            and context.scene.sequence_editor
-            and context.scene.sequence_editor.active_strip
+            and context.sequencer_scene.sequence_editor
+            and context.sequencer_scene.sequence_editor.active_strip
         ):
-            return context.scene.sequence_editor.active_strip.type == "MOVIE"
+            return context.sequencer_scene.sequence_editor.active_strip.type == "MOVIE"
         else:
             return False
 
@@ -148,14 +148,14 @@ class SEQUENCER_OT_detect_shots(Operator):
         scene = context.scene
         sequencer = bpy.ops.sequencer
         cf = context.scene.frame_current
-        path = context.scene.sequence_editor.active_strip.filepath
+        path = context.sequencer_scene.sequence_editor.active_strip.filepath
         path = (os.path.realpath(bpy.path.abspath(path))).replace("\\", "\\\\")
 
         msg = "Please wait. Detecting shots in "+str(path)+"."
         self.report({'INFO'}, msg)
         
         path = path.replace("\\", "\\\\")
-        active = context.scene.sequence_editor.active_strip
+        active = context.sequencer_scene.sequence_editor.active_strip
         start_time = active.frame_offset_start
         end_time = active.frame_duration - active.frame_offset_end
         scenes = find_scenes(path, 32, start_time, end_time)
